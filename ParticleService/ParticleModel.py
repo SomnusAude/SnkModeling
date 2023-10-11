@@ -39,6 +39,7 @@ def to_class(c: Type[T], x: Any) -> dict:
 class ParticleElement:
     id: int
     mass: float
+    size: float
     color: List[int]
     posX: float
     posY: float
@@ -50,17 +51,19 @@ class ParticleElement:
         assert isinstance(obj, dict)
         id = int(from_str(obj.get("id")))
         mass = from_float(obj.get("mass"))
+        size = from_float(obj.get("size"))
         color = from_list(from_int, obj.get("color"))
         posX = from_float(obj.get("posX"))
         posY = from_float(obj.get("posY"))
         speedX = from_float(obj.get("speedX"))
         speedY = from_float(obj.get("speedY"))
-        return ParticleElement(id, mass, color, posX, posY, speedX, speedY)
+        return ParticleElement(id, mass, size, color, posX, posY, speedX, speedY)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["id"] = from_str(str(self.id))
         result["mass"] = to_float(self.mass)
+        result["size"] = to_float(self.size)
         result["color"] = from_list(from_int, self.color)
         result["posX"] = to_float(self.posX)
         result["posY"] = to_float(self.posY)
