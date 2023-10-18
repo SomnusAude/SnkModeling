@@ -4,7 +4,7 @@ import pygame
 from matplotlib import pyplot as plt
 
 from ParticleService.ParticleService import generateParticle
-from MovementService.MovementService import movement, wallCollision
+from MovementService.MovementService import movement, wallCollision, particleCollision
 
 
 xMax = 100
@@ -15,18 +15,27 @@ listOfParticles = []
 for i in range(2):
     listOfParticles.append(generateParticle(maxX=xMax, maxY=yMax))
 
-    xList = []
-    yList = []
-    for item in range(50):
-        for particle in listOfParticles:
-            movement(particle, timeDelta)
-            wallCollision(particle, xMax, yMax)
-            # print(f"{particle.posX}, {particle.posY}")
-            xList.append(particle.posX)
-            yList.append(particle.posY)
+xList0 = []
+yList0 = []
+xList1 = []
+yList1 = []
+for times in range(50):
+    movement(listOfParticles[0], timeDelta)
+    # print(f"{particle.posX}, {particle.posY}")
+    xList0.append(listOfParticles[0].posX)
+    yList0.append(listOfParticles[0].posY)
 
-    plt.plot(xList, yList, color=tuple(particle.color))
+    movement(listOfParticles[1], timeDelta)
+    # print(f"{particle.posX}, {particle.posY}")
+    xList1.append(listOfParticles[1].posX)
+    yList1.append(listOfParticles[1].posY)
 
+    particleCollision(listOfParticles[0], listOfParticles[1])
+    wallCollision(listOfParticles[0], xMax, yMax)
+    wallCollision(listOfParticles[1], xMax, yMax)
+
+plt.plot(xList0, yList0, color='green')
+plt.plot(xList1, yList1, color='black')
 
 plt.grid()
 plt.show()

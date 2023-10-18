@@ -1,4 +1,5 @@
 from ParticleService.ParticleModel import ParticleElement
+import numpy as np
 
 
 def wallCollision(particle: ParticleElement, xMax: float, yMax: float):
@@ -33,3 +34,15 @@ def movement(particle: ParticleElement, timeDelta: float) -> ParticleElement:
 
     particle.posX += speedX*timeDelta
     particle.posY += speedY*timeDelta
+
+def particleCollision(particle1:ParticleElement, particle2:ParticleElement):
+    if np.sqrt((particle1.posX-particle2.posX)**2 + (particle1.posY-particle2.posY)**2) < (particle1.size + particle2.size):
+        velocityX = particle1.speedX -  particle2.speedX
+        velocityY = particle1.speedY -  particle2.speedY
+        phi = np.random.rand()*2*np.pi
+        velocityCenterX = (particle1.mass*particle1.speedX + particle2.mass*particle2.speedX) / (particle1.mass + particle2.mass) 
+        velocityCenterY = (particle1.mass*particle1.speedY + particle2.mass*particle2.speedY) / (particle1.mass + particle2.mass)
+        particle1.speedX = particle2.mass/(particle1.mass + particle2.mass) * (np.cos(phi)*velocityX+np.sin(phi)*velocityCenterX) + velocityCenterX
+        particle1.speedY = particle2.mass/(particle1.mass + particle2.mass) * (np.cos(phi)*velocityY+np.sin(phi)*velocityCenterY) + velocityCenterY
+        particle2.speedX = -particle1.mass/(particle1.mass + particle2.mass) * (np.cos(phi)*velocityX+np.sin(phi)*velocityCenterX) + velocityCenterX
+        particle2.speedY = -particle1.mass/(particle1.mass + particle2.mass) * (np.cos(phi)*velocityY+np.sin(phi)*velocityCenterY) + velocityCenterY
